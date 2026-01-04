@@ -6,7 +6,7 @@ const admin = require("../../middleware/admin.middleware.js");
 module.exports = (app) => {
     // USER
     app.post("/api/v1/order/", auth, userOrder.placeOrder);
-    app.get("/api/v1//my-order", auth, userOrder.getMyOrders);
+    app.get("/api/v1/my-order", auth, userOrder.getMyOrders);
     app.put("/api/v1/order/:id/cancel", auth, userOrder.cancelOrder);
 
     // ADMIN

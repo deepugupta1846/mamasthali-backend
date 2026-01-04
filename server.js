@@ -4,8 +4,6 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 const db = require('./app/model/index')
 
-const routers = require('./routers');
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -45,11 +43,11 @@ app.use((err, req, res, next) => {
 const connectDb = async () => {
   try {
     await db.sequelize.authenticate();
-    db.sequelize.sync({alter: true}).then((res)=>{
-      console.log("sync db success...")
-    }).catch((err)=>{
-      console.log("failed to sync db...", err.message)
-    })
+    // db.sequelize.sync({alter: true}).then((res)=>{
+    //   console.log("sync db success...")
+    // }).catch((err)=>{
+    //   console.log("failed to sync db...", err.message)
+    // })
     console.log('✅ Database connection established successfully.');
   } catch (error) {
     console.error('❌ Unable to connect to the database:', error);

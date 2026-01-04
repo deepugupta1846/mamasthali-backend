@@ -2,6 +2,25 @@ const db = require("../../model");
 const Meal = db.meal;
 
 /**
+ * GET ALL MEALS (Admin - includes unavailable)
+ */
+exports.getAllMeals = async (req, res) => {
+  try {
+    const meals = await Meal.findAll({
+      order: [["created_at", "DESC"]],
+    });
+
+    res.json({
+      success: true,
+      data: meals,
+    });
+  } catch (error) {
+    console.error("Get All Meals Error:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+/**
  * ADD MEAL
  */
 exports.addMeal = async (req, res) => {
