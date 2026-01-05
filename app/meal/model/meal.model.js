@@ -19,7 +19,7 @@ module.exports = (sequelize, Sequelize) => {
       },
 
       meal_type: {
-        type: Sequelize.ENUM("breakfast", "lunch", "dinner"),
+        type: Sequelize.ENUM("breakfast", "lunch", "dinner", "premium", "special"),
         allowNull: false,
       },
 
