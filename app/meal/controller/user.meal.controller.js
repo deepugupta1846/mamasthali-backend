@@ -26,3 +26,30 @@ exports.getMealById = async (req, res) => {
 
   res.json({ success: true, data: meal });
 };
+
+/**
+ * Get meals by category
+ */
+exports.getMealsByCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const meals = await Meal.findAll({
+      where: { 
+        meal_type: category,
+        is_available: true 
+      },
+      order: [["created_at", "DESC"]],
+      limit: limit,
+    });
+
+    res.json({
+      success: true,
+      data: meals,
+    });
+  } catch (error) {
+    console.error("Get Meals By Category Error:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};

@@ -7,6 +7,7 @@ const upload = require("../../middleware/upload.middleware.js");
 module.exports = (app) => {
     // USER
     app.get("/api/v1/meal", userMeal.getMenu);
+    app.get("/api/v1/meal/category/:category", userMeal.getMealsByCategory);
     app.get("/api/v1/meal/:id", userMeal.getMealById);
 
     // ADMIN
