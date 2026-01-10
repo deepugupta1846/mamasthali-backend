@@ -1,5 +1,7 @@
 const db = require("../../model");
 const Order = db.order;
+const User = db.user;
+const whatsappService = require("../../services/whatsapp.service");
 
 exports.placeOrder = async (req, res) => {
   try {
@@ -11,6 +13,7 @@ exports.placeOrder = async (req, res) => {
       address,
       total_amount,
       order_type,
+      instructions,
     } = req.body;
 
     if (!meal_type || !delivery_date || !address || !total_amount) {
@@ -20,6 +23,7 @@ exports.placeOrder = async (req, res) => {
       });
     }
 
+    // Create order
     const order = await Order.create({
       user_id: req.user.id,
       meal_type,
@@ -28,8 +32,25 @@ exports.placeOrder = async (req, res) => {
       delivery_time,
       address,
       total_amount,
-      order_type,
+      order_type: order_type || 'single',
     });
+
+    // Fetch user details for WhatsApp notifications
+    const user = await User.findByPk(req.user.id, {
+      attributes: { exclude: ["password"] },
+    });
+
+    if (!user) {
+      console.error("User not found for order notification");
+    } else {
+      // Send WhatsApp notifications asynchronously (don't block order creation)
+      Promise.all([
+        whatsappService.sendOrderNotificationToAdmin(order, user),
+        whatsappService.sendOrderConfirmationToUser(order, user),
+      ]).catch((error) => {
+        console.error("WhatsApp notification error (non-blocking):", error);
+      });
+    }
 
     res.status(201).json({
       success: true,
