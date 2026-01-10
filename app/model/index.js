@@ -17,12 +17,12 @@ const sequelize = new Sequelize(
       acquire: config.pool.acquire,
       idle: config.pool.idle
     },
-    // dialectOptions: {
-    //   ssl: {
-    //     require: true,
-    //     rejectUnauthorized: true
-    //   }
-    // }
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: true
+      }
+    }
   }
 );
 
